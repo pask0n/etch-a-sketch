@@ -1,4 +1,5 @@
 const grid = document.querySelector('#grid')
+let gridCell;
 
 function createGrid(squarePerSide) {
 
@@ -6,23 +7,42 @@ function createGrid(squarePerSide) {
         let gridCell = document.createElement("div");
         gridCell.setAttribute("class", "grid-cell");
         gridCell.style.width = (100 / squarePerSide) + '%';
-        grid.appendChild(gridCell);
+        grid.append(gridCell);
     }
 }
 
 createGrid(8);
+addCellListener();
 
-const gridCell = document.querySelectorAll(".grid-cell")
+function addCellListener() {
+    gridCell = document.querySelectorAll(".grid-cell")
 
-gridCell.forEach(function (gridCell) {
-    gridCell.addEventListener("mouseover", function () {
-        paintgrid(gridCell);
+    gridCell.forEach(function (gridCell) {
+        gridCell.addEventListener("mouseover", function () {
+            paintgrid(gridCell);
+        }, {once: true});
     });
-});
+}
 
 function paintgrid(gridCell) {
     gridCell.style.backgroundColor = "black";
+
 }
+
+let newGridSize = 1;
+
+button.onclick = function() {
+    removeAllChildNodes(grid)
+    newGridSize = prompt('New Grid Size?')
+    if (newGridSize <= 100) {
+        createGrid(newGridSize)
+    } else if (newGridSize > 100) {
+        alert('Grid too big! Maximum is 100x100')
+        createGrid(100)
+    }
+    addCellListener();
+}
+
 
 function removeAllChildNodes(parent) {
     while (parent.firstChild) {
