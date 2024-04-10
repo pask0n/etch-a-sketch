@@ -1,51 +1,56 @@
-const grid = document.querySelector('#grid')
-let gridCell;
+const mainGrid = document.querySelector('#main-grid')
 
-function createGrid(squarePerSide) {
-
-    for (let i = 0; i < (squarePerSide ** 2); i++) {
+function createNewGrid(gridSize) {
+    for (let i = 0; i < (gridSize ** 2); i++) {
         let gridCell = document.createElement("div");
         gridCell.setAttribute("class", "grid-cell");
-        gridCell.style.width = (100 / squarePerSide) + '%';
-        grid.append(gridCell);
+        gridCell.style.width = (100 / gridSize) + '%';
+        mainGrid.append(gridCell);
     }
 }
 
-createGrid(8);
-addCellListener();
-
-function addCellListener() {
-    gridCell = document.querySelectorAll(".grid-cell")
-
-    gridCell.forEach(function (gridCell) {
-        gridCell.addEventListener("mouseover", function () {
-            paintgrid(gridCell);
-        }, {once: true});
-    });
-}
-
-function paintgrid(gridCell) {
-    gridCell.style.backgroundColor = "black";
-
-}
-
-let newGridSize = 1;
-
-button.onclick = function() {
-    removeAllChildNodes(grid)
-    newGridSize = prompt('New Grid Size?')
-    if (newGridSize <= 100) {
-        createGrid(newGridSize)
-    } else if (newGridSize > 100) {
-        alert('Grid too big! Maximum is 100x100')
-        createGrid(100)
+function addGridListener() {
+    for (let gridCell of mainGrid.children) {
+        gridCell.addEventListener("mouseover", paintgrid)
     }
-    addCellListener();
 }
 
+createNewGrid(4);
+addGridListener();
+
+function paintgrid(e) {
+    e.target.style.backgroundColor = "black";
+}
+
+let btn = document.querySelector("#new-grid-btn")
+
+btn.addEventListener('click', () => {
+    removeAllChildNodes(mainGrid)
+    removeGridListener()
+    newGridCheck(prompt('New Grid Size?'))
+    addGridListener()
+})
 
 function removeAllChildNodes(parent) {
     while (parent.firstChild) {
         parent.removeChild(parent.firstChild);
+    }
+}
+
+function removeGridListener() {
+    for (let gridCell of mainGrid.children) {
+        gridCell.removeEventListener("mouseover", paintgrid)
+    }
+}
+
+function newGridCheck(newGridSize) {
+    if (newGridSize <= 100) {
+        createNewGrid(newGridSize)
+    } else if (newGridSize > 100) {
+        alert('Grid too big! Maximum is 100x100')
+        createNewGrid(100)
+    } else {
+        alert('Invalid Input. Creating a 4x4 grid')
+        createNewGrid(4)
     }
 }
